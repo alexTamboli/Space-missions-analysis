@@ -583,9 +583,29 @@ with main_panel:
             height = 500,
             color_discrete_sequence=['#1f77b4']
         )
- 
+        st.plotly_chart(fig, use_container_width=True)
+        
+        #--------------------------------------------------------------------------------------
+        data = df.groupby(['Company Name', 'year'])['Status Mission'].count().reset_index()
+        data.columns = [
+            'company', 
+            'year', 
+            'starts'
+        ]
+        top5 = data.groupby(['company'])['starts'].sum().reset_index().sort_values('starts', ascending=False).head(5)['company'].tolist()
+        data = data[data['company'].isin(top5)]
+        fig = px.line(
+            data, 
+            x="year", 
+            y="starts", 
+            title='Dynamic of top 5 companies by number of starts', 
+            color='company'
+        )
         st.plotly_chart(fig, use_container_width=True)
 
+        #----------------------------------------------------------------------------------------
+        
+        
         
     
     #####################################################################################
