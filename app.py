@@ -39,12 +39,35 @@ df['year'] = df['date'].apply(lambda datetime: datetime.year)
 df['month'] = df['date'].apply(lambda datetime: datetime.month)
 df['weekday'] = df['date'].apply(lambda datetime: datetime.weekday())
 
+countries_dict = {
+            'Russia' : 'Russian Federation',
+            'New Mexico' : 'USA',
+            "Yellow Sea": 'China',
+            "Shahrud Missile Test Site": "Iran",
+            "Pacific Missile Range Facility": 'USA',
+            "Barents Sea": 'Russian Federation',
+            "Gran Canaria": 'USA'
+        }
+df['country'] = df['Location'].str.split(', ').str[-1].replace(countries_dict)
+
+country_dict = dict()
+for c in countries:
+    country_dict[c.name] = c.alpha3
+df['alpha3'] = df['country']
+df = df.replace(
+    {
+        "alpha3": country_dict
+    }
+)
+df.loc[df['country'] == "North Korea", 'alpha3'] = "PRK"
+df.loc[df['country'] == "South Korea", 'alpha3'] = "KOR"
+
 
 # Top navbar
-st.set_page_config(page_title="My App", page_icon=":guardsman:", layout="wide")
+st.set_page_config(page_title="Space Missions Analysis", page_icon=":guardsman:", layout="wide")
     
 with st.sidebar:
-    st.title('Navigation')
+    st.title('Space Missions Analysis')
     pages = ['Home', 
              'About Data', 
              'Dataset Overview', 
@@ -55,7 +78,7 @@ with st.sidebar:
              'Time Series Decomposition',
              'India`s Place'
              ]
-    page = st.radio('Go to', pages)
+    page = st.radio('Navigation', pages)
     if page == 'About Data':
         st.write('## Select a dataset')
         datasets = ['Dataset 1', 'Dataset 2', 'Dataset 3']
@@ -301,17 +324,6 @@ with main_panel:
     #####################################################################################
     elif page == 'Geo Analysis':
         st.write('This is Page 3.')
-        countries_dict = {
-            'Russia' : 'Russian Federation',
-            'New Mexico' : 'USA',
-            "Yellow Sea": 'China',
-            "Shahrud Missile Test Site": "Iran",
-            "Pacific Missile Range Facility": 'USA',
-            "Barents Sea": 'Russian Federation',
-            "Gran Canaria": 'USA'
-        }
-        df['country'] = df['Location'].str.split(', ').str[-1].replace(countries_dict)
-        
         sun = df.groupby(['country', 'Company Name', 'Status Mission'])['Datum'].count().reset_index()
 
         sun.columns = [
@@ -336,17 +348,7 @@ with main_panel:
         st.plotly_chart(fig, use_container_width=True)
         
         #--------------------------------------------------------------------------------------------     
-        country_dict = dict()
-        for c in countries:
-            country_dict[c.name] = c.alpha3
-        df['alpha3'] = df['country']
-        df = df.replace(
-            {
-                "alpha3": country_dict
-            }
-        )
-        df.loc[df['country'] == "North Korea", 'alpha3'] = "PRK"
-        df.loc[df['country'] == "South Korea", 'alpha3'] = "KOR"
+        
 
         def plot_map(dataframe, target_column, title, width=800, height=600, color_scale='Viridis'):
             mapdf = dataframe.groupby(['country', 'alpha3'])[target_column].count().reset_index()
@@ -604,22 +606,221 @@ with main_panel:
         st.plotly_chart(fig, use_container_width=True)
 
         #----------------------------------------------------------------------------------------
+        data = df.groupby(['Company Name', 'year'])['Status Mission'].count().reset_index()
+        data.columns = [
+            'company', 
+            'year', 
+            'starts'
+        ]
+        data = data[data['year']==2020]
+        fig = px.bar(
+            data, 
+            x="company", 
+            y="starts", 
+            title='Number of starts for 2020', 
+            width=800
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        #------------------------------------------------------------------------------------------
+        data = df[df['Status Mission']=='Failure']
+        data = data.groupby(['Company Name', 'year'])['Status Mission'].count().reset_index()
+        data.columns = [
+            'company', 
+            'year', 
+            'starts'
+        ]
+        data = data[data['year']==2020]
+        fig = px.bar(
+            data, 
+            x="company", 
+            y="starts", 
+            title='Failures in 2020', 
+            width=600
+        )
+        st.plotly_chart(fig, use_container_width=True)
         
         
-        
-    
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'The Cold war':
         st.write('This is Page 3.')
+        cold = df[df['year'] <= 1991]
+        cold['country'].unique()
+        cold.loc[cold['country'] == 'Kazakhstan', 'country'] = 'USSR'
+        cold.loc[cold['country'] == 'Russian Federation', 'country'] = 'USSR'
+        cold = cold[(cold['country'] == 'USSR') | (cold['country'] == 'USA')]
         
+        ds = cold['country'].value_counts().reset_index()
+        ds.columns = ['country', 'count']
+        colors = px.colors.qualitative.Dark24
+        title_font = dict(size=20, family='Arial')
+        fig = px.pie(ds, 
+                    names='country', 
+                    values='count', 
+                    title='Number of Launches by Country',
+                    hole=0.5, # Change hole size
+                    color_discrete_sequence=colors, # Assign custom colors
+                    labels={'country': 'Country', 'count': 'Number of Launches'}, # Rename labels
+                    width=700, 
+                    height=500)
+        fig.update_traces(textposition='inside', textinfo='percent+label')
+        fig.update_layout(title_font=title_font)
+        st.plotly_chart(fig, use_container_width=True)
+        
+        #----------------------------------------------------------------------------------------
+        ds = cold.groupby(['year', 'country'])['alpha3'].count().reset_index()
+        ds.columns = ['Year', 'Country', 'Launches']
+        colors = ['rgb(53, 83, 255)', 'rgb(255, 128, 0)']
+        fig = px.bar(
+            ds, 
+            x="Year", 
+            y="Launches", 
+            color='Country', 
+            title='USA vs USSR: Launches Year by Year',
+            color_discrete_sequence=colors, # Set custom color palette
+            labels={'Year': 'Year', 'Launches': 'Number of Launches', 'Country': 'Country'}, # Rename labels
+            height=500, 
+            width=800
+        )
+        fig.update_xaxes(tickangle=45, tickfont=dict(size=10))
+        fig.update_layout(
+            legend=dict(
+                title=None,
+                orientation='h',
+                yanchor='top',
+                y=1.1,
+                xanchor='left',
+                x=0.15,
+                font=dict(size=12)
+            )
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        #------------------------------------------------------------------------------------------
+        import plotly.express as px
+        ds = cold.groupby(['year', 'country'])['Company Name'].nunique().reset_index()
+        ds.columns = ['Year', 'Country', 'Companies']
+        colors = ['rgb(53, 83, 255)', 'rgb(255, 128, 0)']
+        fig = px.bar(ds, 
+                    x='Year', 
+                    y='Companies', 
+                    color='Country',
+                    color_discrete_sequence=colors,
+                    title='USA vs USSR: Number of Companies Year by Year',
+                    labels={'Year': 'Year', 'Companies': 'Number of Companies', 'Country': 'Country'},
+                    height=500, 
+                    width=800)
+        fig.update_xaxes(tickangle=45, tickfont=dict(size=10))
+        fig.update_layout(
+            legend=dict(
+                title=None,
+                orientation='h',
+                yanchor='top',
+                y=1.1,
+                xanchor='left',
+                x=0.15,
+                font=dict(size=12)
+            ),
+            font=dict(size=14)
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        #-----------------------------------------------------------------------------------------
+        ds = cold[cold['Status Mission'] == 'Failure']
+        ds = ds.groupby(['year', 'country'])['alpha3'].count().reset_index()
+        ds.columns = ['Year', 'Country', 'Failures']
+        colors = ['rgb(53, 83, 255)', 'rgb(255, 128, 0)']
+        fig = px.bar(
+            ds, 
+            x="Year", 
+            y="Failures", 
+            color='Country', 
+            title='USA vs USSR: Failures Year by Year',
+            color_discrete_sequence=colors, # Set custom color palette
+            labels={'Year': 'Year', 'Failures': 'Number of Failures', 'Country': 'Country'}, # Rename labels
+            height=500, 
+            width=800
+        )
+        fig.update_xaxes(tickangle=45, tickfont=dict(size=10))
+        fig.update_layout(
+            legend=dict(
+                title=None,
+                orientation='h',
+                yanchor='top',
+                y=1.1,
+                xanchor='left',
+                x=0.15,
+                font=dict(size=12)
+            )
+        )
+        st.plotly_chart(fig, use_container_width=True)
+               
     
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'Best Every Year':
         st.write('This is Page 3.')
+        ds = df.groupby(['year', 'country'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
+        ds = pd.concat([group[1].head(1) for group in ds.groupby(['year'])])
+        ds.columns = ['year', 'country', 'launches']
+        fig = px.bar(
+            ds, 
+            x="year", 
+            y="launches", 
+            color='country', 
+            title='Leaders by launches for every year (countries)'
+        )
+        st.plotly_chart(fig, use_container_width=True)
+        
+        #-------------------------------------------------------------------------------------
+        ds = df[df['Status Mission']=='Success']
+        ds = ds.groupby(['year', 'country'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
+        ds = pd.concat([group[1].head(1) for group in ds.groupby(['year'])])
+        ds.columns = ['year', 'country', 'launches']
+        fig = px.bar(
+            ds, 
+            x="year", 
+            y="launches", 
+            color='country', 
+            title='Leaders by success launches for every year (countries)',
+            width=800
+        )
+        st.plotly_chart(fig, use_container_width=True)
+        
+        #----------------------------------------------------------------------------------------
+        ds = df.groupby(['year', 'Company Name'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
+        ds = pd.concat([group[1].head(1) for group in ds.groupby(['year'])])
+        ds.columns = ['year', 'company', 'launches']
+        fig = px.bar(
+            ds, 
+            x="year", 
+            y="launches", 
+            color='company', 
+            title='Leaders by launches for every year (companies)',
+            width=800
+        )
+        st.plotly_chart(fig, use_container_width=True)
+        
+        #---------------------------------------------------------------------------------------
+        ds = df[df['Status Mission']=='Success']
+        ds = ds.groupby(['year', 'Company Name'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
+        ds = pd.concat([group[1].head(1) for group in ds.groupby(['year'])])
+        ds.columns = ['year', 'company', 'launches']
+        fig = px.bar(
+            ds, 
+            x="year", 
+            y="launches", 
+            color='company', 
+            title='Leaders by success launches for every year (companies)',
+            width=800
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+
+
         
     #####################################################################################
     ######                                                                         ######
