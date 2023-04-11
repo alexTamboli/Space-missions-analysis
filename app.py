@@ -96,12 +96,12 @@ with main_panel:
     if page == 'Home':
         st.subheader('Data Analytics and Visualization Project')
         st.markdown(''' 
-        ### Members
-        1. Alex Tamboli - 202011071
-        2. Ashish Gupta - 202011013
-        3. Chinmay Badoliya - 202011016
-        4. Nishesh Jain - 202011050
-        5. Prashant Kumar - 202011058
+        #### Members
+        1. **Alex Tamboli** - 202011071
+        2. **Ashish Gupta** - 202011013
+        3. **Chinmay Badoliya** - 202011016
+        4. **Nishesh Jain** - 202011050
+        5. **Prashant Kumar** - 202011058
         ''')
         
     
@@ -606,6 +606,20 @@ with main_panel:
             yaxis_title='Launches'
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+
+        - The USSR had a significant advantage in rocket technology, with early successes in developing powerful rocket engines and launch vehicles. This combination of government support, early achievements, and technical expertise helped the USSR establish dominance in space exploration during the 1960s to 1990s.
+
+        - CASC, or the China Aerospace Science and Technology Corporation, was established in 1999 to consolidate China's aerospace industry. In the past, China faced challenges in developing its space technology due to limited resources and access to advanced technology. However, in recent years, the Chinese government has significantly increased its investment in space exploration, leading to rapid development and progress in China's space technology. 
+
+        - One of the primary factors in decline of General Dynamics was the decline in funding for space exploration by the US government. During the 1960s and 1970s, the US government invested heavily in space exploration as part of the Cold War space race against the Soviet Union. However, with the end of the Cold War and a shift in government priorities, funding for space exploration declined significantly.
+
+        - In 2011 NASA transitioned to relying on commercial space companies like SpaceX and Boeing to transport astronauts to the International Space Station (ISS), rather than developing its own spacecraft. This shift was aimed at reducing the costs and risks of human spaceflight, and allowing NASA to focus on more ambitious goals like returning humans to the Moon and eventually sending humans to Mars.
+
+        - Compared to other space agencies like NASA and Roscosmos, Arianespace has not been as active in manned missions and deep space exploration. This is partly due to the fact that Arianespace is a commercial launch provider, and its focus is primarily on launching satellites for customers rather than conducting its own space exploration missions. 
+
+
+        ''')
 
         #----------------------------------------------------------------------------------------
         data = df.groupby(['Company Name', 'year'])['Status Mission'].count().reset_index()
@@ -623,6 +637,11 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+         - Private companies like SpaceX have emerged as major players in the space industry in recent years, and they may have taken on more of the rocket launches that were previously done by government agencies.
+
+        - China has made significant investments in its space program, with a budget of over $8 billion in 2021. This has allowed them to develop advanced space technologies, including the Long March rockets, which have a high success rate and can carry heavy payloads.
+        ''')
 
         #------------------------------------------------------------------------------------------
         data = df[df['Status Mission']=='Failure']
@@ -781,7 +800,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Best Every Year':
-        st.write('This is Page 3.')
+        
         ds = df.groupby(['year', 'country'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
         ds = pd.concat([group[1].head(1) for group in ds.groupby(['year'])])
         ds.columns = ['year', 'country', 'launches']
@@ -808,6 +827,12 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        - The USSR was the first country to launch a satellite, Sputnik 1, in 1957, which sparked the space race between the USSR and the USA.The combination of government support, early achievements, and technical expertise helped the USSR establish dominance in space exploration during the 1960s to 1990s.
+
+        - In recent years, the Chinese government has significantly increased its investment in space exploration, leading to rapid development and progress in China's space technology. 
+
+        ''')
         
         #----------------------------------------------------------------------------------------
         ds = df.groupby(['year', 'Company Name'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
@@ -837,6 +862,11 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        - The US and USSR had a head start in space exploration, with the US launching the first satellite in 1958 and the USSR launching the first human, Yuri Gagarin, into space in 1961. This early lead gave them a significant advantage in terms of experience and knowledge, which allowed them to develop more successful space programs. Additionally, both countries invested heavily in space exploration during the Cold War, which further advanced their programs.
+
+        - In recent years, companies like SpaceX and CASC have dominated the space industry due to their focus on innovation, cost-cutting measures, and a willingness to take risks. SpaceX, for example, has been able to develop reusable rockets and spacecraft, which has drastically reduced the cost of launching payloads into space.
+        ''')
 
 
 
