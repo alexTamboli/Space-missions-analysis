@@ -68,7 +68,7 @@ df.loc[df['country'] == "South Korea", 'alpha3'] = "KOR"
 st.set_page_config(page_title="Space Missions Analysis", page_icon=":guardsman:", layout="wide")
     
 with st.sidebar:
-    st.title('Space Missions Analysis')
+    st.title('🚀 Space Missions Analysis')
     pages = ['Home', 
              'About Data', 
              'Dataset Overview',  
@@ -79,20 +79,26 @@ with st.sidebar:
              'India`s Place'
              ]
     page = st.radio('Navigation', pages)
-    # if page == 'About Data':
-    #     st.write('## Select a dataset')
-    #     datasets = ['Dataset 1', 'Dataset 2', 'Dataset 3']
-    #     selected_dataset = st.radio('', datasets)     
 
+# Define icons for radio buttons
+# home_icon = "🏠"
+# data_icon = "📊"
+# overview_icon = "🌐"
+# factors_icon = "🤔"
+# war_icon = "🧊"
+# best_icon = "🏆"
+# geo_icon = "🗺️"
+# india_icon = "🇮🇳"
 
 # Create main panel
 main_panel = st.container()
 with main_panel:
-    st.title(page)
+    # st.title(page)
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     if page == 'Home':
+        st.title("🏠" + page)
         st.header(' **Data Analytics and Visualization Project** ')
         st.write('')
         st.write('')
@@ -113,13 +119,12 @@ with main_panel:
         with col2:
             st.image(image)
 
-        
-        
     
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'About Data':
+        st.title("📊" + page)
         st.markdown(''' _The Space Missions Analysis dataset contains information on space missions launched by various countries around the world from 1957 to present. The data includes details such as the launch date, country of origin, rocket used, mission status, and more. The dataset provides valuable insights into the history and trends of space exploration, and can be used to analyze the involvement of different countries in space missions, the success rates of missions, and the evolution of rocket technology over time. Through data visualization, this dataset can help to provide a deeper understanding of the past, present, and future of space exploration._ ''')
         st.write('## Data Frame')
         st.dataframe(df)
@@ -142,6 +147,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Dataset Overview':
+        st.title("🌐" + page)
         st.write(' _The higher number of rocket launches by certain countries can be attributed to a combination of historical context, technological advancements, and military applications._')
         ds = df['Company Name'].value_counts().reset_index()
         ds.columns = ['Company', 'Number of Launches']
@@ -267,6 +273,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Geo Analysis':
+        st.title("🗺️" + page)
         st.write('_The sunburst chart visualizes the number of rockets launched by different companies in various countries, along with the mission status of each launch. The chart is divided into three concentric circles, with the innermost circle representing countries, the middle circle representing companies within each country, and the outer circle representing the mission status of each launch._')
         sun = df.groupby(['country', 'Company Name', 'Status Mission'])['Datum'].count().reset_index()
         sun.columns = [
@@ -358,6 +365,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Interesting Factors':
+        st.title("🤔" + page)
         data = df.groupby(['Company Name'])['Rocket'].sum().reset_index()
         data = data[data['Rocket'] > 0]
         data.columns = [
@@ -635,6 +643,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'The Cold war':
+        st.title("❄️" + page)
         st.write(' _During the Cold War, the United States and the Soviet Union were engaged in intense competition across a wide range of areas, including space exploration. The Cold War between the United States and the Soviet Union had a significant impact on space exploration, driving a rapid advancement in space technology and an increase in space-related investments. Both countries saw space exploration as a way to demonstrate their technological and military superiority and to gain an advantage over the other._')
         st.write('_Overall, the Cold War period saw a significant increase in the number of rockets launched and successful space missions by both the United States and the Soviet Union._ ')
         cold = df[df['year'] <= 1991]
@@ -775,7 +784,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Best Every Year':
-        
+        st.title("🏆" + page)
         ds = df.groupby(['year', 'country'])['Status Mission'].count().reset_index().sort_values(['year', 'Status Mission'], ascending=False)
         ds = pd.concat([group[1].head(1) for group in ds.groupby(['year'])])
         ds.columns = ['year', 'country', 'launches']
@@ -951,10 +960,10 @@ with main_panel:
         fig = px.pie(ds, 
                     names='country', 
                     values='count', 
-                    title='Number of Launches by Country',
-                    hole=0.5, # Change hole size
-                    color_discrete_sequence=colors, # Assign custom colors
-                    labels={'count': 'Number of Launches'}, # Rename labels
+                    title='Number of Launches',
+                    hole=0.5,
+                    color_discrete_sequence=colors,
+                    labels={'count': 'Number of Launches'},
                     width=700, 
                     height=500)
         fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -986,7 +995,8 @@ with main_panel:
                 y=1.1,
                 xanchor='left',
                 x=0.75,
-                font=dict(size=12)
+                font=dict(size=14),
+                title_font=dict(size=20, color='white', family='Arial')
             )
         )
         st.plotly_chart(fig, use_container_width=True)
