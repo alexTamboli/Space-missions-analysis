@@ -7,8 +7,8 @@ import plotly.graph_objects as go
 
 
 from iso3166 import countries
-# from statsmodels.tsa.arima_model import ARIMA
-# from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.seasonal import seasonal_decompose
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -112,24 +112,10 @@ with main_panel:
         st.markdown(''' The Space Missions Analysis dataset contains information on space missions launched by various countries around the world from 1957 to present. The data includes details such as the launch date, country of origin, rocket used, mission status, and more. The dataset provides valuable insights into the history and trends of space exploration, and can be used to analyze the involvement of different countries in space missions, the success rates of missions, and the evolution of rocket technology over time. Through data visualization, this dataset can help to provide a deeper understanding of the past, present, and future of space exploration. ''')
         st.write('## Data Frame')
         st.dataframe(df)
-        missed = pd.DataFrame()
-        missed['column'] = df.columns
-        percent = list()
-        for col in df.columns:
-            percent.append(round(100* df[col].isnull().sum() / len(df), 2))
-        missed['percent'] = percent
-        missed = missed.sort_values('percent')
-        missed = missed[missed['percent']>0]
-        fig = px.bar(
-            missed, 
-            x='percent', 
-            y="column", 
-            orientation='h', 
-            title='Missed values percent for every column (percent > 0)', 
-            width=600,
-            height=200 
-        )
-        st.plotly_chart(fig)
+        st.markdown("""
+            ### Data Wrangling
+            - TODO @Nishesh
+        """)
 
         
     #####################################################################################
@@ -140,81 +126,29 @@ with main_panel:
         ds = df['Company Name'].value_counts().reset_index()
         ds.columns = ['Company', 'Number of Launches']
         ds = ds.sort_values(['Number of Launches'], ascending=False)
-        fig = px.bar(ds, 
-                    x='Number of Launches', 
-                    y="Company", 
-                    orientation='h', 
-                    title='Number of Launches by Every Company',
-                    labels={'Number of Launches': 'Number of Launches', 'Company': 'Company Name'},
-                    height=800,
-                    width=900,
-                    template='simple_white'
-                    )
-        fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(
-                title='',
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=0.1
-            ),
-            yaxis=dict(
-                title='',
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=0.1,
-                tickfont=dict(size=12),
-                automargin=True
-            ),
-            font=dict(
-                family='Arial',
-                size=14,
-                color='black'
-            )
-        )
+        fig = px.treemap(ds, 
+                        path=['Company'], 
+                        values='Number of Launches', 
+                        color='Number of Launches',
+                        color_continuous_scale='YlOrRd',
+                        title='Number of Launches by Every Company',
+                        hover_data={'Number of Launches': ':d', 'Company': False},
+                        custom_data=['Number of Launches'])
         fig.update_traces(
-            texttemplate='%{x}',
-            textposition='outside'
+            hovertemplate='<br>'.join([
+                'Company: %{label}',
+                'Number of Launches: %{customdata[0]}'
+            ]),
+            hoverlabel=dict(
+            bgcolor="yellow",
+            font=dict(size=12, color = "black")
+            ),
+            marker=dict(cornerradius=15)
         )
+        fig.update_layout(height = 400,
+                          margin = dict(t=50, l=25, r=25, b=2))
         st.plotly_chart(fig, use_container_width=True)
         
-        
-        #----------------------------------------------------------------------------------------------------
-        ds = df['Company Name'].value_counts().reset_index()
-        ds.columns = ['Company', 'Number of Launches']
-        trace = go.Bar(
-            x=ds['Number of Launches'],
-            y=ds['Company'],
-            orientation='h',
-            text=ds['Number of Launches'],
-            textposition='outside',
-            marker=dict(color='#1f77b4')
-        )
-        layout = go.Layout(
-            title='Number of Launches by Every Company',
-            xaxis=dict(
-                title='Number of Launches',
-                tickfont=dict(size=12),
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=0.1
-            ),
-            yaxis=dict(
-                title='Company Name',
-                tickfont=dict(size=12),
-                automargin=True
-            ),
-            font=dict(
-                family='Arial',
-                size=14,
-                color='black'
-            ),
-            height=800,
-            plot_bgcolor='rgba(0,0,0,0)'
-        )
-        fig = go.Figure(data=[trace], layout=layout)
-        st.plotly_chart(fig, use_container_width=True)
-
         st.markdown('''
         ### Insights
 
@@ -247,9 +181,9 @@ with main_panel:
         fig.update_layout(
             title=dict(
                 text='Rocket Status',
-                font=dict(size=24)
+                font=dict(size=20)
             ),
-            margin=dict(l=0, r=0, t=80, b=0),
+            margin=dict(l=0, r=0, t=50, b=0),
             font=dict(
                 family='Arial',
                 size=16,
@@ -274,7 +208,7 @@ with main_panel:
                     title='Mission Status Distribution',
                     color='mission_status',
                     color_discrete_sequence=colors,
-                    height=600, 
+                    height=500, 
                     width=800
                     )
         fig.update_layout(
