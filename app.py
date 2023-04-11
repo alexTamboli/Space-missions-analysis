@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 
 
 from iso3166 import countries
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
 
 import matplotlib
