@@ -97,11 +97,11 @@ with main_panel:
         st.subheader('Data Analytics and Visualization Project')
         st.markdown(''' 
         ### Members
-        1. Alex Tamboli - 2020110
-        2. Ashish Gupta - 2020110
-        3. Chinmay Badoliya - 2020110
+        1. Alex Tamboli - 202011071
+        2. Ashish Gupta - 202011013
+        3. Chinmay Badoliya - 202011016
         4. Nishesh Jain - 202011050
-        5. Prashant Kumar - 2020110
+        5. Prashant Kumar - 202011058
         ''')
         
     
@@ -301,7 +301,10 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
-        
+        st.markdown('''
+         The high success rates of missions were likely due to a combination of technological advancements, rigorous testing and quality control procedures, experience and expertise, and strategic importance.
+
+        ''')
 
         #------------------------------------------------------------------------------------
         colorscale = [[0, '#FFFFFF'], [0.5, '#72A1E5'], [1, '#153E75']]
@@ -375,7 +378,7 @@ with main_panel:
         
         st.markdown(''' 
         ### Insights
-         If a particular country has a large segment in the chart, it means that the country has launched a significant number of rockets. Similarly, if a particular company has a large segment within a country's segment, it indicates that the company is responsible for launching a significant number of rockets in that country.
+          The disparity in the number of launches by the USSR and the US compared to other countries can be attributed to a combination of early development, budgetary constraints, technology transfer, and international cooperation. However, in recent years, other countries like China, India, and Japan have been investing heavily in their space programs and are catching up in terms of the number of launches and achievements in space exploration.
         ''')
         
         
@@ -408,12 +411,19 @@ with main_panel:
             )
             st.plotly_chart(fig, use_container_width=True)
         
+
+        
         plot_map(
             dataframe=df, 
             target_column='Status Mission', 
             title='Number of launches per country',
             color_scale='YlOrRd'
         )
+
+        st.markdown(''' 
+        ### Insights
+        A world heat map that shows the number of space missions by country can provide valuable insights into the distribution of space exploration activity around the world.In this case, the map shows that the USSR and the US have had significantly more space missions than other countries.However, the map also shows that other countries like China, India, and Japan are becoming increasingly active in space exploration and are catching up to the US and the USSR in terms of the number of missions. 
+        ''')
 
         fail_df = df[df['Status Mission'] == 'Failure']
         plot_map(
@@ -425,7 +435,14 @@ with main_panel:
         
         st.markdown(''' 
         ### Insights
-        Insights from the chart include identifying the most active countries and companies in terms of rocket launches, as well as analyzing success rates across different countries and companies. For example, it may be possible to observe trends such as increasing involvement of private companies like SpaceX in space exploration, or the historical dominance of countries like the USA and USSR in space exploration. Additionally, by examining the mission status of launches, insights could be gained about the success rates of different rocket technologies or launch strategies.
+        The higher success rate of the USSR's space program may have been due to a combination of factors, including factors such as
+
+        1.The Soviet Union's space program was often characterized by a focus on simplicity and reliability.
+
+        2.The Soviet Union was known for placing a high priority on the safety of its cosmonauts and spacecraft.
+
+        3.The Soviet Union invested heavily in its launch infrastructure, building a network of launch facilities and associated infrastructure that could support a wide range of missions.
+
         ''')
         
     #####################################################################################
@@ -569,7 +586,7 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
-        
+        st.write('There is no clear pattern in terms of which days and month have more or fewer launches. Lack of dependence on the month and weekdays may be due to the fact that space agencies and companies have a relatively consistent schedule of launches throughout the year which includes careful planning, preparation, and monitoring to ensure a safe and successful launch.')
         #---------------------------------------------------------------------------------------
         res = list()
         for group in df.groupby(['Company Name']):
@@ -696,7 +713,8 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'The Cold war':
-        st.write('This is Page 3.')
+        st.write(' During the Cold War, the United States and the Soviet Union were engaged in intense competition across a wide range of areas, including space exploration. The Cold War between the United States and the Soviet Union had a significant impact on space exploration, driving a rapid advancement in space technology and an increase in space-related investments. Both countries saw space exploration as a way to demonstrate their technological and military superiority and to gain an advantage over the other.')
+        st.write('Overall, the Cold War period saw a significant increase in the number of rockets launched and successful space missions by both the United States and the Soviet Union. ')
         cold = df[df['year'] <= 1991]
         cold['country'].unique()
         cold.loc[cold['country'] == 'Kazakhstan', 'country'] = 'USSR'
@@ -719,6 +737,7 @@ with main_panel:
         fig.update_traces(textposition='inside', textinfo='percent+label')
         fig.update_layout(title_font=title_font)
         st.plotly_chart(fig, use_container_width=True)
+        st.write('The Cold War period saw a total of 2,332 successful space missions by both the United States and the Soviet Union. These missions included those related to satellite launches, human spaceflight, and planetary exploration.')
         
         #----------------------------------------------------------------------------------------
         ds = cold.groupby(['year', 'country'])['alpha3'].count().reset_index()
@@ -748,6 +767,11 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        Between 1957 and 1991, the Soviet Union launched a total of 1770 rockets, including those for military and civilian purposes.The Soviet Union also had several successful missions to the Moon and developed a number of key space technologies, such as space stations and interplanetary probes.
+
+        Between 1958 and 2011, the United States launched a total of 1,736 rockets, including those for military and civilian purposes. The United States achieved several major milestones during the Cold War period, such as the successful landing of astronauts on the Moon and the development of the Space Shuttle program.
+        ''')
 
         #------------------------------------------------------------------------------------------
         import plotly.express as px
@@ -777,6 +801,13 @@ with main_panel:
             font=dict(size=14)
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        The fluctuations in the number of companies in both countries could also be due to changes in government policies or economic factors, which can have an impact on the funding and support available for space exploration.
+
+        The US has a strong history of investing in space exploration through NASA and private companies like SpaceX and Blue Origin. This has led to more companies involved in space exploration in the US than in other countries. However, changes in government policies and economic factors can impact the number of companies involved.
+        
+        On the other hand, the number of companies involved in space exploration in the Soviet Union was more limited, with most space-related activities being controlled by the government. This could be a reason why the number of companies involved in space exploration in the Soviet Union did not increase as rapidly as in the US.
+        ''')
 
         #-----------------------------------------------------------------------------------------
         ds = cold[cold['Status Mission'] == 'Failure']
@@ -807,7 +838,10 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
-               
+        st.write(''' Overall, the higher success rate of the USSR's space program may have been due to a combination of factors-''')
+        st.write("1. The US was playing catch-up to the Soviet Union, which had achieved several milestones before the US, such as launching the first satellite (Sputnik) and sending the first human (Yuri Gagarin) into space. As a result, the US was under pressure to make rapid progress in space exploration, which led to some rushed and risky decisions.")
+        st.write("2. Secondly, the US was pushing the boundaries of technology and science in ways that had not been done before. This meant that there were more opportunities for things to go wrong.")
+        st.write("3. Thirdly, there were technical challenges with the early American rockets, particularly the early versions of the Saturn rockets, which were prone to failures. ")
     
     #####################################################################################
     ######                                                                         ######
