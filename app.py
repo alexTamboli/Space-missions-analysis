@@ -862,7 +862,8 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
-<<<<<<< HEAD
+
+
         st.markdown('''
         - The US and USSR had a head start in space exploration, with the US launching the first satellite in 1958 and the USSR launching the first human, Yuri Gagarin, into space in 1961. This early lead gave them a significant advantage in terms of experience and knowledge, which allowed them to develop more successful space programs. Additionally, both countries invested heavily in space exploration during the Cold War, which further advanced their programs.
 
@@ -871,8 +872,6 @@ with main_panel:
 
 
 
-=======
->>>>>>> f192331a9dcc4269ead839c6e9526684e0436384
         
     #####################################################################################
     ######                                                                         ######
