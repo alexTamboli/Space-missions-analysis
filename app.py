@@ -70,12 +70,11 @@ with st.sidebar:
     st.title('Space Missions Analysis')
     pages = ['Home', 
              'About Data', 
-             'Dataset Overview', 
-             'Geo Analysis', 
+             'Dataset Overview',  
              'Interesting Factors', 
              'The Cold war',
              'Best Every Year',
-             'Time Series Decomposition',
+             'Geo Analysis',
              'India`s Place'
              ]
     page = st.radio('Navigation', pages)
@@ -250,38 +249,6 @@ with main_panel:
          The high success rates of missions were likely due to a combination of technological advancements, rigorous testing and quality control procedures, experience and expertise, and strategic importance.
 
         ''')
-
-        #------------------------------------------------------------------------------------
-        fig = go.Figure(go.Histogram(
-            x=df['Rocket'],
-            nbinsx=50
-        ))
-        fig.update_layout(
-            title=dict(
-                text='Rocket Value Distribution',
-                font=dict(size=24)
-            ),
-            xaxis=dict(
-                title='Rocket Value (USD)',
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=0.1
-            ),
-            yaxis=dict(
-                title='Count',
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=0.1,
-                tickfont=dict(size=12),
-                automargin=True
-            ),
-            font=dict(
-                family='Arial',
-                size=16,
-                color='black'
-            )
-        )
-        st.plotly_chart(fig, use_container_width=True)
         
         
     #####################################################################################
@@ -497,22 +464,8 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         
-        #----------------------------------------------------------------------------------------
-        ds = df['weekday'].value_counts().reset_index()
-        ds.columns = [
-            'weekday', 
-            'count'
-        ]
-        fig = px.bar(
-            ds, 
-            x='weekday', 
-            y="count", 
-            orientation='v',
-            title='Missions number by weekday', 
-            width=800
-        )
-        st.plotly_chart(fig, use_container_width=True)
         st.write('There is no clear pattern in terms of which days and month have more or fewer launches. Lack of dependence on the month and weekdays may be due to the fact that space agencies and companies have a relatively consistent schedule of launches throughout the year which includes careful planning, preparation, and monitoring to ensure a safe and successful launch.')
+        
         #---------------------------------------------------------------------------------------
         res = list()
         for group in df.groupby(['Company Name']):
@@ -642,25 +595,6 @@ with main_panel:
 
         - China has made significant investments in its space program, with a budget of over $8 billion in 2021. This has allowed them to develop advanced space technologies, including the Long March rockets, which have a high success rate and can carry heavy payloads.
         ''')
-
-        #------------------------------------------------------------------------------------------
-        data = df[df['Status Mission']=='Failure']
-        data = data.groupby(['Company Name', 'year'])['Status Mission'].count().reset_index()
-        data.columns = [
-            'company', 
-            'year', 
-            'starts'
-        ]
-        data = data[data['year']==2020]
-        fig = px.bar(
-            data, 
-            x="company", 
-            y="starts", 
-            title='Failures in 2020', 
-            width=600
-        )
-        st.plotly_chart(fig, use_container_width=True)
-        
         
     #####################################################################################
     ######                                                                         ######
@@ -727,7 +661,6 @@ with main_panel:
         ''')
 
         #------------------------------------------------------------------------------------------
-        import plotly.express as px
         ds = cold.groupby(['year', 'country'])['Company Name'].nunique().reset_index()
         ds.columns = ['Year', 'Country', 'Companies']
         colors = ['rgb(53, 83, 255)', 'rgb(255, 128, 0)']
@@ -870,93 +803,86 @@ with main_panel:
         - In recent years, companies like SpaceX and CASC have dominated the space industry due to their focus on innovation, cost-cutting measures, and a willingness to take risks. SpaceX, for example, has been able to develop reusable rockets and spacecraft, which has drastically reduced the cost of launching payloads into space.
         ''')
 
-
-
         
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
-    elif page == 'Time Series Decomposition':
-        st.write('This is Page 3.')
-        df['month_year'] = df['year'].astype(str) + '-' + df['month'].astype(str)
-        df['month_year'] = pd.to_datetime(df['month_year']).dt.to_period('M')
-        ds = df.groupby(['month_year'])['alpha3'].count().reset_index()
-        ds.columns = ['month_year', 'count']
-        ds['month_year'] = ds['month_year'].astype(str)    
+    # elif page == 'Time Series Decomposition':
+    #     st.write('This is Page 3.')
+    #     df['month_year'] = df['year'].astype(str) + '-' + df['month'].astype(str)
+    #     df['month_year'] = pd.to_datetime(df['month_year']).dt.to_period('M')
+    #     ds = df.groupby(['month_year'])['alpha3'].count().reset_index()
+    #     ds.columns = ['month_year', 'count']
+    #     ds['month_year'] = ds['month_year'].astype(str)    
         
-        dates = ['1957-10-01', '2020-08-02']
-        start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in dates]
-        dd = pd.DataFrame(
-            list(
-                OrderedDict(((start + timedelta(_)).strftime(r"%Y-%m"), None) for _ in range((end - start).days)).keys()
-            ), 
-            columns=['date']
-        )
-        dd['date'] = pd.to_datetime(dd['date'])
-        ds['month_year'] = pd.to_datetime(ds['month_year'])
-        res = pd.merge(ds, dd, how='outer', left_on='month_year', right_on='date')
-        res = res.sort_values('date')[['date', 'count']]
-        res = res.fillna(0).set_index('date')
+    #     dates = ['1957-10-01', '2020-08-02']
+    #     start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in dates]
+    #     dd = pd.DataFrame(
+    #         list(
+    #             OrderedDict(((start + timedelta(_)).strftime(r"%Y-%m"), None) for _ in range((end - start).days)).keys()
+    #         ), 
+    #         columns=['date']
+    #     )
+    #     dd['date'] = pd.to_datetime(dd['date'])
+    #     ds['month_year'] = pd.to_datetime(ds['month_year'])
+    #     res = pd.merge(ds, dd, how='outer', left_on='month_year', right_on='date')
+    #     res = res.sort_values('date')[['date', 'count']]
+    #     res = res.fillna(0).set_index('date')
         
-        result = seasonal_decompose(res, model='additive', period=12)
-        fig = make_subplots(rows=4, cols=1, shared_xaxes=True, 
-                            vertical_spacing=0.07, subplot_titles=("Observed", "Trend", "Seasonal", "Residual"),
-                            row_heights=[0.1, 0.1, 0.1, 0.1])
-        for i, trace_name in enumerate(['observed', 'trend', 'seasonal', 'resid']):
-            subplot = go.Scatter(x=result.observed.index, y=getattr(result, trace_name).values, mode='lines', showlegend=False)
-            fig.add_trace(subplot, row=i+1, col=1)
-        fig.update_layout(
-            height=1300,
-            title=dict(text='Seasonal Decomposition of Time Series', font=dict(size=24, color='white')),
-            xaxis=dict(title='Date', showgrid=True, gridcolor='lightgray', gridwidth=0.1),
-            yaxis=dict(title='Value', showgrid=True, gridcolor='lightgray', gridwidth=0.1),
-            font=dict(family='Arial', size=16, color='white'),
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
-        )
-        st.plotly_chart(fig, use_container_width=True)
+    #     result = seasonal_decompose(res, model='additive', period=12)
+    #     fig = make_subplots(rows=4, cols=1, shared_xaxes=True, 
+    #                         vertical_spacing=0.07, subplot_titles=("Observed", "Trend", "Seasonal", "Residual"),
+    #                         row_heights=[0.1, 0.1, 0.1, 0.1])
+    #     for i, trace_name in enumerate(['observed', 'trend', 'seasonal', 'resid']):
+    #         subplot = go.Scatter(x=result.observed.index, y=getattr(result, trace_name).values, mode='lines', showlegend=False)
+    #         fig.add_trace(subplot, row=i+1, col=1)
+    #     fig.update_layout(
+    #         height=1300,
+    #         title=dict(text='Seasonal Decomposition of Time Series', font=dict(size=24, color='white')),
+    #         xaxis=dict(title='Date', showgrid=True, gridcolor='lightgray', gridwidth=0.1),
+    #         yaxis=dict(title='Value', showgrid=True, gridcolor='lightgray', gridwidth=0.1),
+    #         font=dict(family='Arial', size=16, color='white'),
+    #         plot_bgcolor='rgba(0,0,0,0)',
+    #         paper_bgcolor='rgba(0,0,0,0)'
+    #     )
+    #     st.plotly_chart(fig, use_container_width=True)
     
-        #------------------------------------------------------------------------------------
-        st.markdown('''
-                 ### Simple ARIMA Model
-                 not working
-                 ''')
-        # MODEL
-        model = ARIMA(ds['count'], order=(10,1,2))
-        model_fit = model.fit()
+    #     #------------------------------------------------------------------------------------
+    #     st.markdown('''
+    #              ### Simple ARIMA Model
+    #              not working
+    #              ''')
+    #     # MODEL
+    #     model = ARIMA(ds['count'], order=(10,1,2))
+    #     model_fit = model.fit()
         
-        preds = model_fit.forecast(16)
-        preds = preds.tolist()
-        preds = [int(item) for item in preds]
-        months = [
-            '2020-09-01', '2020-10-01', '2020-11-01', '2020-12-01', 
-            '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', 
-            '2021-05-01', '2021-06-01', '2021-07-01', '2021-08-01', 
-            '2021-09-01', '2021-10-01', '2021-11-01', '2021-12-01'
-        ]
-        new_df = pd.DataFrame()
-        new_df['month_year'] = months
-        new_df['count'] = preds
-        data = pd.concat([ds, new_df])
+    #     preds = model_fit.forecast(16)
+    #     preds = preds.tolist()
+    #     preds = [int(item) for item in preds]
+    #     months = [
+    #         '2020-09-01', '2020-10-01', '2020-11-01', '2020-12-01', 
+    #         '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', 
+    #         '2021-05-01', '2021-06-01', '2021-07-01', '2021-08-01', 
+    #         '2021-09-01', '2021-10-01', '2021-11-01', '2021-12-01'
+    #     ]
+    #     new_df = pd.DataFrame()
+    #     new_df['month_year'] = months
+    #     new_df['count'] = preds
+    #     data = pd.concat([ds, new_df])
 
-        fig = px.line(
-            data, 
-            x="month_year", 
-            y="count", 
-            title='Launches per month prediction'
-        )
-        st.plotly_chart(fig, use_container_width=True)
-        
+    #     fig = px.line(
+    #         data, 
+    #         x="month_year", 
+    #         y="count", 
+    #         title='Launches per month prediction'
+    #     )
+    #     st.plotly_chart(fig, use_container_width=True)
         
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'India`s Place':
         st.write('This is Page 3.')
-
-
-
-
 
 
 
