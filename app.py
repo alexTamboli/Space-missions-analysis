@@ -114,7 +114,17 @@ with main_panel:
         st.dataframe(df)
         st.markdown("""
             ### Data Wrangling
-            - TODO @Nishesh
+            - Cleaning and wrangling the data involves several steps, including:
+
+                1. Removing any duplicate or irrelevant data.
+
+                2. Checking for missing values and deciding on how to handle them (either by imputing missing data or removing rows with missing values).
+
+                3. Standardizing and cleaning the data format (e.g., ensuring consistent date formats, converting text data to numerical data, etc.).
+
+                4. Checking for outliers and deciding how to handle them.
+
+                5. Creating new variables or transforming existing variables as needed.
         """)
 
         
@@ -563,6 +573,7 @@ with main_panel:
             plot_bgcolor='rgba(0,0,0,0)'
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.write("Based on the graph, it appears that some of the older companies such as the US Navy and US Air Force have not launched rockets in several decades. Meanwhile, newer countries have emerged and are launching rockets more frequently. This suggests that the landscape of space exploration has shifted over time, with new players entering the field and taking on more active roles.")
 
         #--------------------------------------------------------------------------------------
         money = df[df['Rocket']>0]
@@ -575,6 +586,7 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.write("The average money spent on space exploration was higher between 1980 and 1990 could be the emergence of more nations beyond the US and the USSR entering the field of space exploration. As more countries developed their space programs, there was increased competition and a desire to keep up with the latest advancements in technology. This may have led to more spending on research and development in space exploration, and increased funding for space agencies in these countries.")
         
         #--------------------------------------------------------------------------------------
         ds = df.groupby(['Company Name'])['year'].nunique().reset_index()
@@ -739,7 +751,7 @@ with main_panel:
         The fluctuations in the number of companies in both countries could also be due to changes in government policies or economic factors, which can have an impact on the funding and support available for space exploration.
 
         The US has a strong history of investing in space exploration through NASA and private companies like SpaceX and Blue Origin. This has led to more companies involved in space exploration in the US than in other countries. However, changes in government policies and economic factors can impact the number of companies involved.
-        
+
         On the other hand, the number of companies involved in space exploration in the Soviet Union was more limited, with most space-related activities being controlled by the government. This could be a reason why the number of companies involved in space exploration in the Soviet Union did not increase as rapidly as in the US.
         ''')
 
