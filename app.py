@@ -242,7 +242,8 @@ with main_panel:
                 family='Arial',
                 size=14,
                 color='black'
-            )
+            ),
+            margin=dict(l=0, r=0, t=50, b=0)
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
@@ -251,14 +252,9 @@ with main_panel:
         ''')
 
         #------------------------------------------------------------------------------------
-        colorscale = [[0, '#FFFFFF'], [0.5, '#72A1E5'], [1, '#153E75']]
         fig = go.Figure(go.Histogram(
             x=df['Rocket'],
-            nbinsx=50,
-            marker=dict(color='#72A1E5'),
-            opacity=0.7,
-            hovertemplate='Count: %{y}',
-            name='Rocket Value'
+            nbinsx=50
         ))
         fig.update_layout(
             title=dict(
@@ -285,11 +281,7 @@ with main_panel:
                 color='black'
             )
         )
-        fig.data[0].update(
-            {'marker': {'colorscale': colorscale, 'showscale': True}}
-        )
         st.plotly_chart(fig, use_container_width=True)
-
         
         
     #####################################################################################
@@ -298,14 +290,12 @@ with main_panel:
     elif page == 'Geo Analysis':
         st.write('The sunburst chart visualizes the number of rockets launched by different companies in various countries, along with the mission status of each launch. The chart is divided into three concentric circles, with the innermost circle representing countries, the middle circle representing companies within each country, and the outer circle representing the mission status of each launch.')
         sun = df.groupby(['country', 'Company Name', 'Status Mission'])['Datum'].count().reset_index()
-
         sun.columns = [
             'country', 
             'company', 
             'status', 
             'count'
         ]
-
         fig = px.sunburst(
             sun, 
             path=[
@@ -316,8 +306,9 @@ with main_panel:
             values='count', 
             title='Sunburst chart for all countries',
             width=800,
-            height=800 
+            height=500 
         )
+        fig.update_layout(margin=dict(l=0, r=0, t=30, b=0))
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown(''' 
@@ -327,7 +318,6 @@ with main_panel:
         
         
         #--------------------------------------------------------------------------------------------     
-
         def plot_map(dataframe, target_column, title, width=800, height=600, color_scale='Viridis'):
             mapdf = dataframe.groupby(['country', 'alpha3'])[target_column].count().reset_index()
             fig = px.choropleth(
@@ -355,15 +345,12 @@ with main_panel:
             )
             st.plotly_chart(fig, use_container_width=True)
         
-
-        
         plot_map(
             dataframe=df, 
             target_column='Status Mission', 
             title='Number of launches per country',
             color_scale='YlOrRd'
         )
-
         st.markdown(''' 
         ### Insights
         A world heat map that shows the number of space missions by country can provide valuable insights into the distribution of space exploration activity around the world.In this case, the map shows that the USSR and the US have had significantly more space missions than other countries.However, the map also shows that other countries like China, India, and Japan are becoming increasingly active in space exploration and are catching up to the US and the USSR in terms of the number of missions. 
@@ -376,7 +363,6 @@ with main_panel:
             title='Number of Fails per country',
             color_scale='YlOrRd'
         )  
-        
         st.markdown(''' 
         ### Insights
         The higher success rate of the USSR's space program may have been due to a combination of factors, including factors such as
@@ -393,15 +379,12 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Interesting Factors':
-        
         data = df.groupby(['Company Name'])['Rocket'].sum().reset_index()
         data = data[data['Rocket'] > 0]
-
         data.columns = [
             'company', 
             'money'
         ]
-
         fig = px.bar(
             data, 
             x='company', 
@@ -409,12 +392,11 @@ with main_panel:
             orientation='v', 
             title='Total money spent on missions', 
             width=800,
-            height=600,
+            height=500,
             color='money',
             color_continuous_scale=px.colors.sequential.YlOrRd,
             color_continuous_midpoint=data['money'].median()
         )
-
         fig.update_yaxes(title='', showticklabels=False)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -438,7 +420,7 @@ with main_panel:
             orientation='v', 
             title='Average money per one launch', 
             width=800,
-            height=600,
+            height=500,
             color='avg',
             color_continuous_scale=px.colors.sequential.YlOrRd,
             color_continuous_midpoint=av_money_df['avg'].median()
@@ -553,7 +535,7 @@ with main_panel:
                 '<extra></extra>',
         ))
         fig.update_layout(
-            title='Years since 2020',
+            title='Years since last Rocket launch from 2020',
             title_x=0.5,
             font=dict(size=12),
             width=900,
@@ -585,6 +567,9 @@ with main_panel:
             title='Average money spent by year',
             width=800
         )
+        fig.update_layout(
+            yaxis_title='Money'
+        )
         st.plotly_chart(fig, use_container_width=True)
         st.write("The average money spent on space exploration was higher between 1980 and 1990 could be the emergence of more nations beyond the US and the USSR entering the field of space exploration. As more countries developed their space programs, there was increased competition and a desire to keep up with the latest advancements in technology. This may have led to more spending on research and development in space exploration, and increased funding for space agencies in these countries.")
         
@@ -614,8 +599,11 @@ with main_panel:
             data, 
             x="year", 
             y="starts", 
-            title='Dynamic of top 5 companies by number of starts', 
+            title='Top 5 companies by number of launches', 
             color='company'
+        )
+        fig.update_layout(
+            yaxis_title='Launches'
         )
         st.plotly_chart(fig, use_container_width=True)
 
