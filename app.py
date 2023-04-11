@@ -65,7 +65,7 @@ df.loc[df['country'] == "South Korea", 'alpha3'] = "KOR"
 
 
 # Top navbar
-st.set_page_config(page_title="Space Missions Analysis", page_icon=":guardsman:", layout="wide")
+st.set_page_config(page_title="Space Missions Analysis", page_icon=":🚀:", layout="wide")
     
 with st.sidebar:
     st.title('🚀 Space Missions Analysis')
@@ -118,7 +118,6 @@ with main_panel:
          
         with col2:
             st.image(image)
-
     
     #####################################################################################
     ######                                                                         ######
