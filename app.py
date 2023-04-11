@@ -7,8 +7,8 @@ import plotly.graph_objects as go
 
 
 from iso3166 import countries
-from statsmodels.tsa.arima_model import ARIMA
-from statsmodels.tsa.seasonal import seasonal_decompose
+# from statsmodels.tsa.arima_model import ARIMA
+# from statsmodels.tsa.seasonal import seasonal_decompose
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -94,13 +94,22 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     if page == 'Home':
-        st.write('Welcome to the Streamlit Dashboard!')
+        st.subheader('Data Analytics and Visualization Project')
+        st.markdown(''' 
+        ### Members
+        1. Alex Tamboli - 2020110
+        2. Ashish Gupta - 2020110
+        3. Chinmay Badoliya - 2020110
+        4. Nishesh Jain - 202011050
+        5. Prashant Kumar - 2020110
+        ''')
         
     
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'About Data':
+        st.markdown(''' The Space Missions Analysis dataset contains information on space missions launched by various countries around the world from 1957 to present. The data includes details such as the launch date, country of origin, rocket used, mission status, and more. The dataset provides valuable insights into the history and trends of space exploration, and can be used to analyze the involvement of different countries in space missions, the success rates of missions, and the evolution of rocket technology over time. Through data visualization, this dataset can help to provide a deeper understanding of the past, present, and future of space exploration. ''')
         st.write('## Data Frame')
         st.dataframe(df)
         missed = pd.DataFrame()
@@ -127,7 +136,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Dataset Overview':
-        st.write('This is Page 2.')
+        st.write(' The higher number of rocket launches by certain countries can be attributed to a combination of historical context, technological advancements, and military applications.')
         ds = df['Company Name'].value_counts().reset_index()
         ds.columns = ['Company', 'Number of Launches']
         ds = ds.sort_values(['Number of Launches'], ascending=False)
@@ -169,6 +178,7 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         
+        
         #----------------------------------------------------------------------------------------------------
         ds = df['Company Name'].value_counts().reset_index()
         ds.columns = ['Company', 'Number of Launches']
@@ -205,6 +215,17 @@ with main_panel:
         fig = go.Figure(data=[trace], layout=layout)
         st.plotly_chart(fig, use_container_width=True)
 
+        st.markdown('''
+        ### Insights
+
+        1.**Historical Context**: The USSR and the USA were in a space race during the Cold War, which fueled significant investment in space exploration and a high number of rocket launches. Since then, these two countries have continued to maintain a strong presence in space exploration.
+
+        2.**Technological Advancements**: NASA, Boeing, and SpaceX are all major players in the commercial space industry and have developed advanced rocket technology. This has allowed them to launch a larger number of rockets and achieve higher success rates than other countries.
+
+        3.**Military Applications**: The US Air Force has been involved in launching rockets for military applications, such as spy satellites and communication networks, which require a high number of launches.
+
+        ''')
+
         #--------------------------------------------------------------------------------------------------
         ds = df['Status Rocket'].value_counts().reset_index()
         ds.columns = ['status', 'count']
@@ -236,6 +257,10 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown(''' 
+        ### Insights
+        The fact that around 80% of rockets are not currently in use highlights the fact that historically rockets were designed as expendable vehicles, meaning they were only intended to be used once and then discarded. This resulted in a significant amount of waste and high launch costs, as a new rocket had to be built for each launch.
+        ''')
         
         #---------------------------------------------------------------------------------------------
         ds = df['Status Mission'].value_counts().reset_index()
@@ -276,6 +301,7 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
+        
 
         #------------------------------------------------------------------------------------
         colorscale = [[0, '#FFFFFF'], [0.5, '#72A1E5'], [1, '#153E75']]
@@ -323,7 +349,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Geo Analysis':
-        st.write('This is Page 3.')
+        st.write('The sunburst chart visualizes the number of rockets launched by different companies in various countries, along with the mission status of each launch. The chart is divided into three concentric circles, with the innermost circle representing countries, the middle circle representing companies within each country, and the outer circle representing the mission status of each launch.')
         sun = df.groupby(['country', 'Company Name', 'Status Mission'])['Datum'].count().reset_index()
 
         sun.columns = [
@@ -347,8 +373,13 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         
-        #--------------------------------------------------------------------------------------------     
+        st.markdown(''' 
+        ### Insights
+         If a particular country has a large segment in the chart, it means that the country has launched a significant number of rockets. Similarly, if a particular company has a large segment within a country's segment, it indicates that the company is responsible for launching a significant number of rockets in that country.
+        ''')
         
+        
+        #--------------------------------------------------------------------------------------------     
 
         def plot_map(dataframe, target_column, title, width=800, height=600, color_scale='Viridis'):
             mapdf = dataframe.groupby(['country', 'alpha3'])[target_column].count().reset_index()
@@ -392,12 +423,16 @@ with main_panel:
             color_scale='YlOrRd'
         )  
         
+        st.markdown(''' 
+        ### Insights
+        Insights from the chart include identifying the most active countries and companies in terms of rocket launches, as well as analyzing success rates across different countries and companies. For example, it may be possible to observe trends such as increasing involvement of private companies like SpaceX in space exploration, or the historical dominance of countries like the USA and USSR in space exploration. Additionally, by examining the mission status of launches, insights could be gained about the success rates of different rocket technologies or launch strategies.
+        ''')
         
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'Interesting Factors':
-        st.write('This is Page 3.')
+        
         data = df.groupby(['Company Name'])['Rocket'].sum().reset_index()
         data = data[data['Rocket'] > 0]
 
@@ -421,6 +456,8 @@ with main_panel:
 
         fig.update_yaxes(title='', showticklabels=False)
         st.plotly_chart(fig, use_container_width=True)
+
+        
         
         # #----------------------------------------------------------------------------------------
         money = df.groupby(['Company Name'])['Rocket'].sum()
@@ -448,6 +485,12 @@ with main_panel:
 
         fig.update_yaxes(title='', showticklabels=False)
         st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown(''' 
+        **Insights**
+        
+        The significant difference in funding between NASA and private companies reflects the different priorities and goals of each entity. NASA's focus on scientific research and pushing the boundaries of space exploration requires significant investment, which is made possible through government funding. Private companies, on the other hand, may focus more on commercial applications of space technology and therefore may not require as much funding.
+        ''')
         
         #-----------------------------------------------------------------------------------------
         ds = df['year'].value_counts().reset_index()
@@ -486,6 +529,14 @@ with main_panel:
         )
         fig = go.Figure(data=[bar], layout=layout)
         st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown('''
+        **Insights**
+        
+        During the period between 1966 and 1978, there was a significant increase in the number of launches primarily driven by the space race between the United States and the Soviet Union. This was a period of intense competition between the two nations, and both were investing heavily in space exploration and technology development.
+
+        In recent years, there has been renewed interest in space exploration and commercial space ventures. Private companies such as SpaceX have entered the market and are driving innovation and competition in the industry.
+        ''')
         
         #-----------------------------------------------------------------------------------------
         ds = df['month'].value_counts().reset_index()
