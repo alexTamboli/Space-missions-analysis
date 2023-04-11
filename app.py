@@ -82,8 +82,7 @@ with st.sidebar:
     # if page == 'About Data':
     #     st.write('## Select a dataset')
     #     datasets = ['Dataset 1', 'Dataset 2', 'Dataset 3']
-    #     selected_dataset = st.radio('', datasets)
-        
+    #     selected_dataset = st.radio('', datasets)     
 
 
 # Create main panel
@@ -204,12 +203,12 @@ with main_panel:
                 text='Rocket Status',
                 font=dict(size=20)
             ),
-            margin=dict(l=0, r=0, t=50, b=0),
             font=dict(
                 family='Arial',
                 size=16,
                 color='black'
-            )
+            ),
+            height=470
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown(''' 
@@ -541,7 +540,8 @@ with main_panel:
         
         #--------------------------------------------------------------------------------------
         ds = df.groupby(['Company Name'])['year'].nunique().reset_index()
-        ds.columns = [    'company',     'count']
+        ds.columns = ['company','count']
+        ds = ds.sort_values(by='count', ascending=False)
         fig = px.bar(
             ds, 
             x="company", 
@@ -635,7 +635,7 @@ with main_panel:
                     color_discrete_sequence=colors, # Assign custom colors
                     labels={'country': 'Country', 'count': 'Number of Launches'}, # Rename labels
                     width=700, 
-                    height=500)
+                    height=450)
         fig.update_traces(textposition='inside', textinfo='percent+label')
         fig.update_layout(title_font=title_font)
         st.plotly_chart(fig, use_container_width=True)
@@ -645,7 +645,7 @@ with main_panel:
         ds = cold.groupby(['year', 'country'])['alpha3'].count().reset_index()
         ds.columns = ['Year', 'Country', 'Launches']
         colors = ['rgb(53, 83, 255)', 'rgb(255, 128, 0)']
-        fig = px.bar(
+        fig = px.line(
             ds, 
             x="Year", 
             y="Launches", 
@@ -715,7 +715,7 @@ with main_panel:
         ds = ds.groupby(['year', 'country'])['alpha3'].count().reset_index()
         ds.columns = ['Year', 'Country', 'Failures']
         colors = ['rgb(53, 83, 255)', 'rgb(255, 128, 0)']
-        fig = px.bar(
+        fig = px.line(
             ds, 
             x="Year", 
             y="Failures", 
@@ -902,9 +902,107 @@ with main_panel:
     #####################################################################################
     elif page == 'India`s Place':
         st.write('This is Page 3.')
+    
+        compare = df[(df['country'] == 'India') | (df['country'] == 'USA')]
+        india = compare[compare['country']=='India']
+        years = india['year'].unique()
+        years.sort()
 
+        compare = compare[compare['year']>=1979]
+        ds = compare['country'].value_counts().reset_index()
+        ds.columns = ['country', 'count']
+        colors = ['#1f77b4', '#ff7f0e']
+        title_font = dict(size=20, color='#444444', family='Arial')
 
+        fig = px.pie(ds, 
+                    names='country', 
+                    values='count', 
+                    title='Number of Launches by Country',
+                    hole=0.5, # Change hole size
+                    color_discrete_sequence=colors, # Assign custom colors
+                    labels={'count': 'Number of Launches'}, # Rename labels
+                    width=700, 
+                    height=500)
+        fig.update_traces(textposition='inside', textinfo='percent+label')
+        fig.update_layout(title_font=dict(size=20, color='white', family='Arial'))
+        st.plotly_chart(fig, use_container_width=True)
 
+        #-----------------------------------------------------------------------------------
+        ds = compare.groupby(['year', 'country'])['Status Mission'].count().reset_index()
+        ds.columns = ['year', 'country', 'Launches']
+        total = ds
+        colors = ['rgb(255, 128, 0)', 'rgb(53, 83, 255)']
+        fig = px.line(
+            ds, 
+            x="year", 
+            y="Launches", 
+            color='country', 
+            title='USA vs India: Launches Year by Year',
+            color_discrete_sequence=colors, # Set custom color palette
+            labels={'year': 'Year', 'Launches': 'Number of Launches', 'country': 'Country'}, # Rename labels
+            height=500, 
+            width=800
+        )
+        fig.update_xaxes(tickfont=dict(size=10))
+        fig.update_layout(
+            legend=dict(
+                title=None,
+                orientation='h',
+                yanchor='top',
+                y=1.1,
+                xanchor='left',
+                x=0.75,
+                font=dict(size=12)
+            )
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        #-----------------------------------------------------------------------------------------
+        ds_total = compare.groupby(['year', 'country'])['Status Mission'].count().reset_index()
+        ds_total.columns = ['year', 'country', 'Total']
+        ds_success = compare[compare['Status Mission'] == 'Success'].groupby(['year', 'country'])['Status Mission'].count().reset_index()
+        ds_success.columns = ['year', 'country', 'Success']
+        ds_f = pd.merge(ds_total, ds_success, on=['year', 'country'], how='outer').fillna(0)
+        ds_f['Success_pct'] = ds_f['Success'] / ds_f['Total'] * 100
+        ds_mean = ds_f.groupby('country')['Success_pct'].mean().reset_index()
+        
+        fig = px.pie(ds_mean, 
+             values='Success_pct', 
+             names='country',
+             title='Mean Success Percentage for USA vs India',
+             color_discrete_sequence=['#1f77b4', '#ff7f0e'], 
+             hole=0.5,
+             labels={'country': 'Country', 'Success_pct': 'Mean Success Percentage'},
+             width=700, 
+             height=500)
+        fig.update_traces(textposition='inside', textinfo='percent+label')
+        fig.update_layout(title_font=dict(size=20, color='white', family='Arial'))
+        st.plotly_chart(fig, use_container_width=True)
+        
+        #---------------------------------------------------------------------------------------
+        trace1 = go.Scatter(
+            x=ds_f[ds_f['country'] == 'USA']['year'],
+            y=ds_f[ds_f['country'] == 'USA']['Success_pct'],
+            name='USA',
+            line=dict(color='#1f77b4', width=2)
+        )
+        trace2 = go.Scatter(
+            x=ds_f[ds_f['country'] == 'India']['year'],
+            y=ds_f[ds_f['country'] == 'India']['Success_pct'],
+            name='India',
+            line=dict(color='#ff7f0e', width=2)
+        )
+        data = [trace1, trace2]
+        layout = go.Layout(
+            title='Success Percentage by Year and Country',
+            xaxis=dict(title='Year'),
+            yaxis=dict(title='Success Percentage')
+        )
+        fig = go.Figure(data=data, layout=layout)
+        st.plotly_chart(fig, use_container_width=True)
+
+        
+        
 
 # Add footer
 # st.markdown("""
