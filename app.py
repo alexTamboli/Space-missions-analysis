@@ -7,11 +7,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from iso3166 import countries
-from statsmodels.tsa.arima.model import ARIMA
-from statsmodels.tsa.seasonal import seasonal_decompose
+# from statsmodels.tsa.arima.model import ARIMA
+# from statsmodels.tsa.seasonal import seasonal_decompose
 
 import matplotlib
 import matplotlib.pyplot as plt
+from PIL import Image
 
 from datetime import datetime, timedelta
 from collections import OrderedDict
@@ -92,8 +93,15 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     if page == 'Home':
-        st.subheader('Data Analytics and Visualization Project')
-        st.markdown(''' 
+        st.header(' **Data Analytics and Visualization Project** ')
+        st.write('')
+        st.write('')
+        st.write('')
+        image = Image.open("space_rocket.png")
+
+        col1,col2  = st.columns(2)
+        with col1:
+            st.markdown(''' 
         #### Members
         1. **Alex Tamboli** - 202011071
         2. **Ashish Gupta** - 202011013
@@ -101,28 +109,32 @@ with main_panel:
         4. **Nishesh Jain** - 202011050
         5. **Prashant Kumar** - 202011058
         ''')
+         
+        with col2:
+            st.image(image)
+
+        
         
     
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'About Data':
-        st.markdown(''' The Space Missions Analysis dataset contains information on space missions launched by various countries around the world from 1957 to present. The data includes details such as the launch date, country of origin, rocket used, mission status, and more. The dataset provides valuable insights into the history and trends of space exploration, and can be used to analyze the involvement of different countries in space missions, the success rates of missions, and the evolution of rocket technology over time. Through data visualization, this dataset can help to provide a deeper understanding of the past, present, and future of space exploration. ''')
+        st.markdown(''' _The Space Missions Analysis dataset contains information on space missions launched by various countries around the world from 1957 to present. The data includes details such as the launch date, country of origin, rocket used, mission status, and more. The dataset provides valuable insights into the history and trends of space exploration, and can be used to analyze the involvement of different countries in space missions, the success rates of missions, and the evolution of rocket technology over time. Through data visualization, this dataset can help to provide a deeper understanding of the past, present, and future of space exploration._ ''')
         st.write('## Data Frame')
         st.dataframe(df)
         st.markdown("""
             ### Data Wrangling
-            - Cleaning and wrangling the data involves several steps, including:
+            Cleaning and wrangling the data involves several steps, including:
 
-                1. Removing any duplicate or irrelevant data.
+            - Any duplicate or irrelevant data was removed to ensure that the dataset is accurate and relevant for analysis. In addition, any rows or columns that had null values in the rocket name column were removed since this information is important for analyzing the rocket technology used in each mission. 
 
-                2. Checking for missing values and deciding on how to handle them (either by imputing missing data or removing rows with missing values).
+            - We have converted the date and time format in the data to a more suitable format that can be effectively analyzed and visualized. This conversion was carried out using the appropriate Python libraries and functions that ensure a professional and accurate handling of the data.
 
-                3. Standardizing and cleaning the data format (e.g., ensuring consistent date formats, converting text data to numerical data, etc.).
+            - In the data wrangling process, the date column was parsed to extract additional information such as month, year, and weekday. This was done to facilitate the visualization of the data by grouping it into different time periods and identifying trends and patterns. 
 
-                4. Checking for outliers and deciding how to handle them.
+            - We performed a scaling operation on the price data by multiplying the original values, which ranged from 0 to 1, by a factor of 1,000,000. This was done to convert the values into millions, enabling better comparability and analysis of the data.
 
-                5. Creating new variables or transforming existing variables as needed.
         """)
 
         
@@ -130,7 +142,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Dataset Overview':
-        st.write(' The higher number of rocket launches by certain countries can be attributed to a combination of historical context, technological advancements, and military applications.')
+        st.write(' _The higher number of rocket launches by certain countries can be attributed to a combination of historical context, technological advancements, and military applications._')
         ds = df['Company Name'].value_counts().reset_index()
         ds.columns = ['Company', 'Number of Launches']
         ds = ds.sort_values(['Number of Launches'], ascending=False)
@@ -158,13 +170,13 @@ with main_panel:
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown('''
-        ### Insights
+        ##### Insights
 
-        1.**Historical Context**: The USSR and the USA were in a space race during the Cold War, which fueled significant investment in space exploration and a high number of rocket launches. Since then, these two countries have continued to maintain a strong presence in space exploration.
+        - _**Historical Context**_: _The USSR and the USA were in a space race during the Cold War, which fueled significant investment in space exploration and a high number of rocket launches. Since then, these two countries have continued to maintain a strong presence in space exploration._
 
-        2.**Technological Advancements**: NASA, Boeing, and SpaceX are all major players in the commercial space industry and have developed advanced rocket technology. This has allowed them to launch a larger number of rockets and achieve higher success rates than other countries.
+        - _**Technological Advancements**_: _NASA, Boeing, and SpaceX are all major players in the commercial space industry and have developed advanced rocket technology. This has allowed them to launch a larger number of rockets and achieve higher success rates than other countries._
 
-        3.**Military Applications**: The US Air Force has been involved in launching rockets for military applications, such as spy satellites and communication networks, which require a high number of launches.
+        - _**Military Applications**_: _The US Air Force has been involved in launching rockets for military applications, such as spy satellites and communication networks, which require a high number of launches._
 
         ''')
 
@@ -200,8 +212,8 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown(''' 
-        ### Insights
-        The fact that around 80% of rockets are not currently in use highlights the fact that historically rockets were designed as expendable vehicles, meaning they were only intended to be used once and then discarded. This resulted in a significant amount of waste and high launch costs, as a new rocket had to be built for each launch.
+        ##### Insights
+        - _The fact that around 80% of rockets are not currently in use highlights the fact that historically rockets were designed as expendable vehicles, meaning they were only intended to be used once and then discarded. This resulted in a significant amount of waste and high launch costs, as a new rocket had to be built for each launch._
         ''')
         
         #---------------------------------------------------------------------------------------------
@@ -245,7 +257,8 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
-         The high success rates of missions were likely due to a combination of technological advancements, rigorous testing and quality control procedures, experience and expertise, and strategic importance.
+        ##### Insights
+         - _The high success rates of missions were likely due to a combination of technological advancements, rigorous testing and quality control procedures, experience and expertise, and strategic importance._
 
         ''')
         
@@ -254,7 +267,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'Geo Analysis':
-        st.write('The sunburst chart visualizes the number of rockets launched by different companies in various countries, along with the mission status of each launch. The chart is divided into three concentric circles, with the innermost circle representing countries, the middle circle representing companies within each country, and the outer circle representing the mission status of each launch.')
+        st.write('_The sunburst chart visualizes the number of rockets launched by different companies in various countries, along with the mission status of each launch. The chart is divided into three concentric circles, with the innermost circle representing countries, the middle circle representing companies within each country, and the outer circle representing the mission status of each launch._')
         sun = df.groupby(['country', 'Company Name', 'Status Mission'])['Datum'].count().reset_index()
         sun.columns = [
             'country', 
@@ -278,8 +291,8 @@ with main_panel:
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown(''' 
-        ### Insights
-          The disparity in the number of launches by the USSR and the US compared to other countries can be attributed to a combination of early development, budgetary constraints, technology transfer, and international cooperation. However, in recent years, other countries like China, India, and Japan have been investing heavily in their space programs and are catching up in terms of the number of launches and achievements in space exploration.
+        ##### Insights
+          - _The disparity in the number of launches by the USSR and the US compared to other countries can be attributed to a combination of early development, budgetary constraints, technology transfer, and international cooperation. However, in recent years, other countries like China, India, and Japan have been investing heavily in their space programs and are catching up in terms of the number of launches and achievements in space exploration._
         ''')
         
         
@@ -318,8 +331,8 @@ with main_panel:
             color_scale='YlOrRd'
         )
         st.markdown(''' 
-        ### Insights
-        A world heat map that shows the number of space missions by country can provide valuable insights into the distribution of space exploration activity around the world.In this case, the map shows that the USSR and the US have had significantly more space missions than other countries.However, the map also shows that other countries like China, India, and Japan are becoming increasingly active in space exploration and are catching up to the US and the USSR in terms of the number of missions. 
+        ##### Insights
+        - _A world heat map that shows the number of space missions by country can provide valuable insights into the distribution of space exploration activity around the world.In this case, the map shows that the USSR and the US have had significantly more space missions than other countries.However, the map also shows that other countries like China, India, and Japan are becoming increasingly active in space exploration and are catching up to the US and the USSR in terms of the number of missions._
         ''')
 
         fail_df = df[df['Status Mission'] == 'Failure']
@@ -330,14 +343,14 @@ with main_panel:
             color_scale='YlOrRd'
         )  
         st.markdown(''' 
-        ### Insights
-        The higher success rate of the USSR's space program may have been due to a combination of factors, including factors such as
+        ##### Insights
+        _The higher success rate of the USSR's space program may have been due to a combination of factors, including factors such as_
 
-        1.The Soviet Union's space program was often characterized by a focus on simplicity and reliability.
+        - _The Soviet Union's space program was often characterized by a focus on simplicity and reliability._
 
-        2.The Soviet Union was known for placing a high priority on the safety of its cosmonauts and spacecraft.
+        - _The Soviet Union was known for placing a high priority on the safety of its cosmonauts and spacecraft._
 
-        3.The Soviet Union invested heavily in its launch infrastructure, building a network of launch facilities and associated infrastructure that could support a wide range of missions.
+        - _The Soviet Union invested heavily in its launch infrastructure, building a network of launch facilities and associated infrastructure that could support a wide range of missions._
 
         ''')
         
@@ -396,9 +409,9 @@ with main_panel:
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown(''' 
-        **Insights**
+        ##### Insights
         
-        The significant difference in funding between NASA and private companies reflects the different priorities and goals of each entity. NASA's focus on scientific research and pushing the boundaries of space exploration requires significant investment, which is made possible through government funding. Private companies, on the other hand, may focus more on commercial applications of space technology and therefore may not require as much funding.
+        - _The significant difference in funding between NASA and private companies reflects the different priorities and goals of each entity. NASA's focus on scientific research and pushing the boundaries of space exploration requires significant investment, which is made possible through government funding. Private companies, on the other hand, may focus more on commercial applications of space technology and therefore may not require as much funding._
         ''')
         
         #-----------------------------------------------------------------------------------------
@@ -440,11 +453,11 @@ with main_panel:
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown('''
-        **Insights**
+        ##### Insights
         
-        During the period between 1966 and 1978, there was a significant increase in the number of launches primarily driven by the space race between the United States and the Soviet Union. This was a period of intense competition between the two nations, and both were investing heavily in space exploration and technology development.
+        - _During the period between 1966 and 1978, there was a significant increase in the number of launches primarily driven by the space race between the United States and the Soviet Union. This was a period of intense competition between the two nations, and both were investing heavily in space exploration and technology development._
 
-        In recent years, there has been renewed interest in space exploration and commercial space ventures. Private companies such as SpaceX have entered the market and are driving innovation and competition in the industry.
+        - _In recent years, there has been renewed interest in space exploration and commercial space ventures. Private companies such as SpaceX have entered the market and are driving innovation and competition in the industry._
         ''')
         
         #-----------------------------------------------------------------------------------------
@@ -463,7 +476,7 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         
-        st.write('There is no clear pattern in terms of which days and month have more or fewer launches. Lack of dependence on the month and weekdays may be due to the fact that space agencies and companies have a relatively consistent schedule of launches throughout the year which includes careful planning, preparation, and monitoring to ensure a safe and successful launch.')
+        st.write('- _There is no clear pattern in terms of which days and month have more or fewer launches. Lack of dependence on the month and weekdays may be due to the fact that space agencies and companies have a relatively consistent schedule of launches throughout the year which includes careful planning, preparation, and monitoring to ensure a safe and successful launch._')
         
         #---------------------------------------------------------------------------------------
         res = list()
@@ -507,7 +520,7 @@ with main_panel:
             plot_bgcolor='rgba(0,0,0,0)'
         )
         st.plotly_chart(fig, use_container_width=True)
-        st.write("Based on the graph, it appears that some of the older companies such as the US Navy and US Air Force have not launched rockets in several decades. Meanwhile, newer countries have emerged and are launching rockets more frequently. This suggests that the landscape of space exploration has shifted over time, with new players entering the field and taking on more active roles.")
+        st.write("- _Based on the graph, it appears that some of the older companies such as the US Navy and US Air Force have not launched rockets in several decades. Meanwhile, newer countries have emerged and are launching rockets more frequently. This suggests that the landscape of space exploration has shifted over time, with new players entering the field and taking on more active roles._")
 
         #--------------------------------------------------------------------------------------
         money = df[df['Rocket']>0]
@@ -523,7 +536,7 @@ with main_panel:
             yaxis_title='Money'
         )
         st.plotly_chart(fig, use_container_width=True)
-        st.write("The average money spent on space exploration was higher between 1980 and 1990 could be the emergence of more nations beyond the US and the USSR entering the field of space exploration. As more countries developed their space programs, there was increased competition and a desire to keep up with the latest advancements in technology. This may have led to more spending on research and development in space exploration, and increased funding for space agencies in these countries.")
+        st.write("- _The average money spent on space exploration was higher between 1980 and 1990 could be the emergence of more nations beyond the US and the USSR entering the field of space exploration. As more countries developed their space programs, there was increased competition and a desire to keep up with the latest advancements in technology. This may have led to more spending on research and development in space exploration, and increased funding for space agencies in these countries._")
         
         #--------------------------------------------------------------------------------------
         ds = df.groupby(['Company Name'])['year'].nunique().reset_index()
@@ -560,16 +573,17 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
+        ##### Insights
 
-        - The USSR had a significant advantage in rocket technology, with early successes in developing powerful rocket engines and launch vehicles. This combination of government support, early achievements, and technical expertise helped the USSR establish dominance in space exploration during the 1960s to 1990s.
+        - _The USSR had a significant advantage in rocket technology, with early successes in developing powerful rocket engines and launch vehicles. This combination of government support, early achievements, and technical expertise helped the USSR establish dominance in space exploration during the 1960s to 1990s._
 
-        - CASC, or the China Aerospace Science and Technology Corporation, was established in 1999 to consolidate China's aerospace industry. In the past, China faced challenges in developing its space technology due to limited resources and access to advanced technology. However, in recent years, the Chinese government has significantly increased its investment in space exploration, leading to rapid development and progress in China's space technology. 
+        - _CASC, or the China Aerospace Science and Technology Corporation, was established in 1999 to consolidate China's aerospace industry. In the past, China faced challenges in developing its space technology due to limited resources and access to advanced technology. However, in recent years, the Chinese government has significantly increased its investment in space exploration, leading to rapid development and progress in China's space technology._
 
-        - One of the primary factors in decline of General Dynamics was the decline in funding for space exploration by the US government. During the 1960s and 1970s, the US government invested heavily in space exploration as part of the Cold War space race against the Soviet Union. However, with the end of the Cold War and a shift in government priorities, funding for space exploration declined significantly.
+        - _One of the primary factors in decline of General Dynamics was the decline in funding for space exploration by the US government. During the 1960s and 1970s, the US government invested heavily in space exploration as part of the Cold War space race against the Soviet Union. However, with the end of the Cold War and a shift in government priorities, funding for space exploration declined significantly._
 
-        - In 2011 NASA transitioned to relying on commercial space companies like SpaceX and Boeing to transport astronauts to the International Space Station (ISS), rather than developing its own spacecraft. This shift was aimed at reducing the costs and risks of human spaceflight, and allowing NASA to focus on more ambitious goals like returning humans to the Moon and eventually sending humans to Mars.
+        - _In 2011 NASA transitioned to relying on commercial space companies like SpaceX and Boeing to transport astronauts to the International Space Station (ISS), rather than developing its own spacecraft. This shift was aimed at reducing the costs and risks of human spaceflight, and allowing NASA to focus on more ambitious goals like returning humans to the Moon and eventually sending humans to Mars._
 
-        - Compared to other space agencies like NASA and Roscosmos, Arianespace has not been as active in manned missions and deep space exploration. This is partly due to the fact that Arianespace is a commercial launch provider, and its focus is primarily on launching satellites for customers rather than conducting its own space exploration missions. 
+        - _Compared to other space agencies like NASA and Roscosmos, Arianespace has not been as active in manned missions and deep space exploration. This is partly due to the fact that Arianespace is a commercial launch provider, and its focus is primarily on launching satellites for customers rather than conducting its own space exploration missions._
 
 
         ''')
@@ -591,17 +605,18 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
-         - Private companies like SpaceX have emerged as major players in the space industry in recent years, and they may have taken on more of the rocket launches that were previously done by government agencies.
+        ##### Insights
+         - _Private companies like SpaceX have emerged as major players in the space industry in recent years, and they may have taken on more of the rocket launches that were previously done by government agencies._
 
-        - China has made significant investments in its space program, with a budget of over $8 billion in 2021. This has allowed them to develop advanced space technologies, including the Long March rockets, which have a high success rate and can carry heavy payloads.
+        - _China has made significant investments in its space program, with a budget of over $8 billion in 2021. This has allowed them to develop advanced space technologies, including the Long March rockets, which have a high success rate and can carry heavy payloads._
         ''')
         
     #####################################################################################
     ######                                                                         ######
     #####################################################################################
     elif page == 'The Cold war':
-        st.write(' During the Cold War, the United States and the Soviet Union were engaged in intense competition across a wide range of areas, including space exploration. The Cold War between the United States and the Soviet Union had a significant impact on space exploration, driving a rapid advancement in space technology and an increase in space-related investments. Both countries saw space exploration as a way to demonstrate their technological and military superiority and to gain an advantage over the other.')
-        st.write('Overall, the Cold War period saw a significant increase in the number of rockets launched and successful space missions by both the United States and the Soviet Union. ')
+        st.write(' _During the Cold War, the United States and the Soviet Union were engaged in intense competition across a wide range of areas, including space exploration. The Cold War between the United States and the Soviet Union had a significant impact on space exploration, driving a rapid advancement in space technology and an increase in space-related investments. Both countries saw space exploration as a way to demonstrate their technological and military superiority and to gain an advantage over the other._')
+        st.write('_Overall, the Cold War period saw a significant increase in the number of rockets launched and successful space missions by both the United States and the Soviet Union._ ')
         cold = df[df['year'] <= 1991]
         cold['country'].unique()
         cold.loc[cold['country'] == 'Kazakhstan', 'country'] = 'USSR'
@@ -624,7 +639,7 @@ with main_panel:
         fig.update_traces(textposition='inside', textinfo='percent+label')
         fig.update_layout(title_font=title_font)
         st.plotly_chart(fig, use_container_width=True)
-        st.write('The Cold War period saw a total of 2,332 successful space missions by both the United States and the Soviet Union. These missions included those related to satellite launches, human spaceflight, and planetary exploration.')
+        st.write('- _The Cold War period saw a total of 2,332 successful space missions by both the United States and the Soviet Union. These missions included those related to satellite launches, human spaceflight, and planetary exploration._')
         
         #----------------------------------------------------------------------------------------
         ds = cold.groupby(['year', 'country'])['alpha3'].count().reset_index()
@@ -655,9 +670,9 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
-        Between 1957 and 1991, the Soviet Union launched a total of 1770 rockets, including those for military and civilian purposes.The Soviet Union also had several successful missions to the Moon and developed a number of key space technologies, such as space stations and interplanetary probes.
+        - _Between 1957 and 1991, the Soviet Union launched a total of 1770 rockets, including those for military and civilian purposes.The Soviet Union also had several successful missions to the Moon and developed a number of key space technologies, such as space stations and interplanetary probes._
 
-        Between 1958 and 2011, the United States launched a total of 1,736 rockets, including those for military and civilian purposes. The United States achieved several major milestones during the Cold War period, such as the successful landing of astronauts on the Moon and the development of the Space Shuttle program.
+        - _Between 1958 and 2011, the United States launched a total of 1,736 rockets, including those for military and civilian purposes. The United States achieved several major milestones during the Cold War period, such as the successful landing of astronauts on the Moon and the development of the Space Shuttle program._
         ''')
 
         #------------------------------------------------------------------------------------------
@@ -688,11 +703,11 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
-        The fluctuations in the number of companies in both countries could also be due to changes in government policies or economic factors, which can have an impact on the funding and support available for space exploration.
+        - _The fluctuations in the number of companies in both countries could also be due to changes in government policies or economic factors, which can have an impact on the funding and support available for space exploration._
 
-        The US has a strong history of investing in space exploration through NASA and private companies like SpaceX and Blue Origin. This has led to more companies involved in space exploration in the US than in other countries. However, changes in government policies and economic factors can impact the number of companies involved.
+        - _The US has a strong history of investing in space exploration through NASA and private companies like SpaceX and Blue Origin. This has led to more companies involved in space exploration in the US than in other countries. However, changes in government policies and economic factors can impact the number of companies involved._
 
-        On the other hand, the number of companies involved in space exploration in the Soviet Union was more limited, with most space-related activities being controlled by the government. This could be a reason why the number of companies involved in space exploration in the Soviet Union did not increase as rapidly as in the US.
+        - _On the other hand, the number of companies involved in space exploration in the Soviet Union was more limited, with most space-related activities being controlled by the government. This could be a reason why the number of companies involved in space exploration in the Soviet Union did not increase as rapidly as in the US._
         ''')
 
         #-----------------------------------------------------------------------------------------
@@ -724,10 +739,10 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
-        st.write(''' Overall, the higher success rate of the USSR's space program may have been due to a combination of factors-''')
-        st.write("1. The US was playing catch-up to the Soviet Union, which had achieved several milestones before the US, such as launching the first satellite (Sputnik) and sending the first human (Yuri Gagarin) into space. As a result, the US was under pressure to make rapid progress in space exploration, which led to some rushed and risky decisions.")
-        st.write("2. Secondly, the US was pushing the boundaries of technology and science in ways that had not been done before. This meant that there were more opportunities for things to go wrong.")
-        st.write("3. Thirdly, there were technical challenges with the early American rockets, particularly the early versions of the Saturn rockets, which were prone to failures. ")
+        st.write(''' _Overall, the higher success rate of the USSR's space program may have been due to a combination of factors-_''')
+        st.write("-  _The US was playing catch-up to the Soviet Union, which had achieved several milestones before the US, such as launching the first satellite (Sputnik) and sending the first human (Yuri Gagarin) into space. As a result, the US was under pressure to make rapid progress in space exploration, which led to some rushed and risky decisions._")
+        st.write("- _Secondly, the US was pushing the boundaries of technology and science in ways that had not been done before. This meant that there were more opportunities for things to go wrong._")
+        st.write("- _Thirdly, there were technical challenges with the early American rockets, particularly the early versions of the Saturn rockets, which were prone to failures._ ")
     
     #####################################################################################
     ######                                                                         ######
@@ -761,9 +776,11 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
-        - The USSR was the first country to launch a satellite, Sputnik 1, in 1957, which sparked the space race between the USSR and the USA.The combination of government support, early achievements, and technical expertise helped the USSR establish dominance in space exploration during the 1960s to 1990s.
+        ##### Insights
 
-        - In recent years, the Chinese government has significantly increased its investment in space exploration, leading to rapid development and progress in China's space technology. 
+        - _The USSR was the first country to launch a satellite, Sputnik 1, in 1957, which sparked the space race between the USSR and the USA.The combination of government support, early achievements, and technical expertise helped the USSR establish dominance in space exploration during the 1960s to 1990s._
+
+        - _In recent years, the Chinese government has significantly increased its investment in space exploration, leading to rapid development and progress in China's space technology._
 
         ''')
         
@@ -798,9 +815,11 @@ with main_panel:
 
 
         st.markdown('''
-        - The US and USSR had a head start in space exploration, with the US launching the first satellite in 1958 and the USSR launching the first human, Yuri Gagarin, into space in 1961. This early lead gave them a significant advantage in terms of experience and knowledge, which allowed them to develop more successful space programs. Additionally, both countries invested heavily in space exploration during the Cold War, which further advanced their programs.
+        ##### Insights
 
-        - In recent years, companies like SpaceX and CASC have dominated the space industry due to their focus on innovation, cost-cutting measures, and a willingness to take risks. SpaceX, for example, has been able to develop reusable rockets and spacecraft, which has drastically reduced the cost of launching payloads into space.
+        - _The US and USSR had a head start in space exploration, with the US launching the first satellite in 1958 and the USSR launching the first human, Yuri Gagarin, into space in 1961. This early lead gave them a significant advantage in terms of experience and knowledge, which allowed them to develop more successful space programs. Additionally, both countries invested heavily in space exploration during the Cold War, which further advanced their programs._
+
+        - _In recent years, companies like SpaceX and CASC have dominated the space industry due to their focus on innovation, cost-cutting measures, and a willingness to take risks. SpaceX, for example, has been able to develop reusable rockets and spacecraft, which has drastically reduced the cost of launching payloads into space._
         ''')
 
         
