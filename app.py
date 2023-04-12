@@ -111,7 +111,7 @@ with main_panel:
         #### Members
         1. **Alex Tamboli** - 202011071
         2. **Ashish Gupta** - 202011013
-        3. **Chinmay Badoliya** - 202011016
+        3. **Chinmay Bhalodia** - 202011016
         4. **Nishesh Jain** - 202011050
         5. **Prashant Kumar** - 202011058
         ''')
