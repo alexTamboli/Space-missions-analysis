@@ -936,7 +936,7 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'India`s Place':
-
+        st.title("" + page)
         st.markdown('''
 
         - _India and the United States have different histories and circumstances that have impacted their respective space exploration programs. The US has been a pioneer in space exploration, with NASA being established in 1958 and playing a significant role in space exploration since then._
