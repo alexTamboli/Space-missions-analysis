@@ -65,7 +65,7 @@ df.loc[df['country'] == "South Korea", 'alpha3'] = "KOR"
 
 
 # Top navbar
-st.set_page_config(page_title="Space Missions Analysis", page_icon=":guardsman:", layout="wide")
+st.set_page_config(page_title="Space Missions Analysis", page_icon=":🚀:", layout="wide")
     
 with st.sidebar:
     st.title('🚀 Space Missions Analysis')
@@ -118,9 +118,6 @@ with main_panel:
          
         with col2:
             st.image(image)
-
-        
-        
     
     #####################################################################################
     ######                                                                         ######
@@ -485,7 +482,9 @@ with main_panel:
             width=800
         )
         st.plotly_chart(fig, use_container_width=True)
-        
+        st.markdown('''
+        ##### Insights
+        ''')
         st.write('- _There is no clear pattern in terms of which days and month have more or fewer launches. Lack of dependence on the month and weekdays may be due to the fact that space agencies and companies have a relatively consistent schedule of launches throughout the year which includes careful planning, preparation, and monitoring to ensure a safe and successful launch._')
         
         #---------------------------------------------------------------------------------------
@@ -530,6 +529,9 @@ with main_panel:
             plot_bgcolor='rgba(0,0,0,0)'
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        ##### Insights
+        ''')
         st.write("- _Based on the graph, it appears that some of the older companies such as the US Navy and US Air Force have not launched rockets in several decades. Meanwhile, newer countries have emerged and are launching rockets more frequently. This suggests that the landscape of space exploration has shifted over time, with new players entering the field and taking on more active roles._")
 
         #--------------------------------------------------------------------------------------
@@ -546,6 +548,9 @@ with main_panel:
             yaxis_title='Money'
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        ##### Insights
+        ''')
         st.write("- _The average money spent on space exploration was higher between 1980 and 1990 could be the emergence of more nations beyond the US and the USSR entering the field of space exploration. As more countries developed their space programs, there was increased competition and a desire to keep up with the latest advancements in technology. This may have led to more spending on research and development in space exploration, and increased funding for space agencies in these countries._")
         
         #--------------------------------------------------------------------------------------
@@ -561,6 +566,18 @@ with main_panel:
             color_discrete_sequence=['#1f77b4']
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        ##### Insights
+        - _Experience and expertise: Companies with a long history in space exploration, such as NASA, the USSR, General Dynamics and the US Air Force, have accumulated a wealth of experience and knowledge over the years, which can give them an advantage over newer players._
+
+        - _Strategic partnerships: Arianespace has formed partnerships with several European countries to develop the Ariane rocket family, which has helped to establish it as a major player in the industry._
+
+        - _Innovative technology: Companies that are able to develop innovative and cutting-edge technology can gain a competitive advantage in space exploration. SpaceX, for example, has made significant strides in reusable rocket technology, which has helped to reduce launch costs and increase efficiency._
+
+        - _China faced initial setbacks in its early attempts to launch satellites into space during the 18th century, but it persisted with its efforts and continued to make progress. As a result, China has accumulated more years of experience in space exploration despite its initial failures._
+ 
+
+        ''')
         
         #--------------------------------------------------------------------------------------
         data = df.groupby(['Company Name', 'year'])['Status Mission'].count().reset_index()
@@ -681,6 +698,8 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
+        ##### Insights
+
         - _Between 1957 and 1991, the Soviet Union launched a total of 1770 rockets, including those for military and civilian purposes.The Soviet Union also had several successful missions to the Moon and developed a number of key space technologies, such as space stations and interplanetary probes._
 
         - _Between 1958 and 2011, the United States launched a total of 1,736 rockets, including those for military and civilian purposes. The United States achieved several major milestones during the Cold War period, such as the successful landing of astronauts on the Moon and the development of the Space Shuttle program._
@@ -714,6 +733,8 @@ with main_panel:
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown('''
+        ##### Insights
+
         - _The fluctuations in the number of companies in both countries could also be due to changes in government policies or economic factors, which can have an impact on the funding and support available for space exploration._
 
         - _The US has a strong history of investing in space exploration through NASA and private companies like SpaceX and Blue Origin. This has led to more companies involved in space exploration in the US than in other countries. However, changes in government policies and economic factors can impact the number of companies involved._
@@ -750,6 +771,9 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        ##### Insights
+        ''')
         st.write(''' _Overall, the higher success rate of the USSR's space program may have been due to a combination of factors-_''')
         st.write("-  _The US was playing catch-up to the Soviet Union, which had achieved several milestones before the US, such as launching the first satellite (Sputnik) and sending the first human (Yuri Gagarin) into space. As a result, the US was under pressure to make rapid progress in space exploration, which led to some rushed and risky decisions._")
         st.write("- _Secondly, the US was pushing the boundaries of technology and science in ways that had not been done before. This meant that there were more opportunities for things to go wrong._")
@@ -912,8 +936,14 @@ with main_panel:
     ######                                                                         ######
     #####################################################################################
     elif page == 'India`s Place':
-        st.title("" + page)
-        st.write('This is Page 3.')
+
+        st.markdown('''
+
+        - _India and the United States have different histories and circumstances that have impacted their respective space exploration programs. The US has been a pioneer in space exploration, with NASA being established in 1958 and playing a significant role in space exploration since then._
+
+        - _In contrast, India's space program started much later, with the establishment of the Indian Space Research Organisation (ISRO) in 1969. ISRO has faced challenges due to limited funding, technology, and infrastructure, which have hindered its progress in space exploration compared to the US._
+
+        ''')
     
         compare = df[(df['country'] == 'India') | (df['country'] == 'USA')]
         india = compare[compare['country']=='India']
@@ -969,6 +999,13 @@ with main_panel:
             )
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        ##### Insights
+
+        -  _India, on the other hand, has faced political and economic instability, which has affected its ability to invest in space exploration._
+
+        - _Additionally, the geographic location of the two countries also plays a role. The US has easy access to space, with the presence of several launch sites. In contrast, India's location farther from the equator and lack of launch sites has made it more challenging to launch and access space._
+        ''')
 
         #-----------------------------------------------------------------------------------------
         ds_total = compare.groupby(['year', 'country'])['Status Mission'].count().reset_index()
@@ -991,30 +1028,38 @@ with main_panel:
         fig.update_traces(textposition='inside', textinfo='percent+label')
         fig.update_layout(title_font=dict(size=20, color='white', family='Arial'))
         st.plotly_chart(fig, use_container_width=True)
+        st.markdown('''
+        ##### Insights
+
+        -  _India has a higher failure rate than the United States when it comes to space missions. This can be attributed to several factors, including the fact that India is still relatively new to the field of space exploration and is still developing its capabilities in this area._
+        
+        - _Additionally, India operates on a much smaller budget than the United States, which can impact the quality and reliability of its space missions._
+
+        - _India's space exploration program has faced numerous political and geographic challenges over the years. For example, India has faced sanctions from other countries due to its nuclear program, which has impacted its ability to access certain technologies and resources needed for space exploration._
+        ''')
+        
         
         #---------------------------------------------------------------------------------------
-        trace1 = go.Scatter(
-            x=ds_f[ds_f['country'] == 'USA']['year'],
-            y=ds_f[ds_f['country'] == 'USA']['Success_pct'],
-            name='USA',
-            line=dict(color='#1f77b4', width=2)
-        )
-        trace2 = go.Scatter(
-            x=ds_f[ds_f['country'] == 'India']['year'],
-            y=ds_f[ds_f['country'] == 'India']['Success_pct'],
-            name='India',
-            line=dict(color='#ff7f0e', width=2)
-        )
-        data = [trace1, trace2]
-        layout = go.Layout(
-            title='Success Percentage by Year and Country',
-            xaxis=dict(title='Year'),
-            yaxis=dict(title='Success Percentage'),
-            font=dict(size=14),
-            title_font=dict(size=20, color='white', family='Arial')
-        )
-        fig = go.Figure(data=data, layout=layout)
-        st.plotly_chart(fig, use_container_width=True)
+        # trace1 = go.Scatter(
+        #     x=ds_f[ds_f['country'] == 'USA']['year'],
+        #     y=ds_f[ds_f['country'] == 'USA']['Success_pct'],
+        #     name='USA',
+        #     line=dict(color='#1f77b4', width=2)
+        # )
+        # trace2 = go.Scatter(
+        #     x=ds_f[ds_f['country'] == 'India']['year'],
+        #     y=ds_f[ds_f['country'] == 'India']['Success_pct'],
+        #     name='India',
+        #     line=dict(color='#ff7f0e', width=2)
+        # )
+        # data = [trace1, trace2]
+        # layout = go.Layout(
+        #     title='Success Percentage by Year and Country',
+        #     xaxis=dict(title='Year'),
+        #     yaxis=dict(title='Success Percentage')
+        # )
+        # fig = go.Figure(data=data, layout=layout)
+        # st.plotly_chart(fig, use_container_width=True)
 
         
         
