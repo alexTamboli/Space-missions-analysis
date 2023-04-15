@@ -76,7 +76,8 @@ with st.sidebar:
              'The Cold war',
              'Best Every Year',
              'Geo Analysis',
-             'India`s Place'
+             'India`s Place',
+             'Reference'
              ]
     page = st.radio('Navigation', pages)
 
@@ -1037,6 +1038,26 @@ with main_panel:
 
         - _India's space exploration program has faced numerous political and geographic challenges over the years. For example, India has faced sanctions from other countries due to its nuclear program, which has impacted its ability to access certain technologies and resources needed for space exploration._
         ''')
+
+        #####################################################################################
+        ######                                                                         ######
+        #####################################################################################
+
+    elif page == 'Reference':
+            url1 = "https://www.arianespace.com/press-release/ariane-5-successful-launch-webb-space-telescope/ "
+            url2 = "https://chinapower.csis.org/china-space-launch/"
+            url3 = "https://escholarship.org/content/qt0kj1q52j/qt0kj1q52j_noSplash_c9b2ab6f54dac13b34007979f3a8dd95.pdf?t=prfwji"
+            url4 = "https://www.forbes.com/sites/startswithabang/2019/07/11/this-is-why-the-soviet-union-lost-the-space-race-to-the-usa/?sh=61cad0141925 "
+            url5 = "https://www.nasa.gov/sites/default/files/files/SEINSI.pdf"
+           
+            st.markdown('''# Reference''')
+            st.write(" - Arianespace Successful Launch[link](%s)" % url1 )
+            st.write(" - China space launch [link](%s)" % url2 )
+            st.write(" - Soviet union lost the space race [link](%s)" % url3 )
+            st.write(" - The post Cold War issues [link](%s)" % url4 )
+            st.write(" - Nasa Website [link](%s)" % url5 )
+            
+
         
         
         #---------------------------------------------------------------------------------------
